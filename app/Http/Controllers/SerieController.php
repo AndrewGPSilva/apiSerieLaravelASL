@@ -10,7 +10,7 @@ class SerieController extends Controller
     public function index()
     {
         $aulas = Serie::all();
-        return response()->json($aulas);
+        return response()->json($aulas, 200);
     }
 
     public function store(Request $request)
