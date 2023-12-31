@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('series', function (Blueprint $table) {
             $table->id();
+            $table->string('titulo');
+            $table->string('capa');
+            $table->string('genero');
+            $table->text('sinopse');
+            $table->integer('ano');
+            $table->integer('temporadas');
+            $table->integer('episodios');
+            $table->integer('classificacao');
             $table->timestamps();
         });
     }
