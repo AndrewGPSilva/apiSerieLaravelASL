@@ -47,13 +47,21 @@ class SerieRepository
 
     public function update(Serie $serie, array $data)
     {
-        return $serie->update($data);
+        try {
+            $serie->update($data);
+            return response()->json(['message' => 'Série atualizada com sucesso!'], 200);
+        } catch (\Exception $e) {
+            if ($serie->isEmpty()) {
+                return response()->json(['error' => 'Série não encontrada', 'details' => $e->getMessage()], 404);
+            }
+            return response()->json(['error' => 'Erro ao atualizar série', 'details' => $e->getMessage()], 400);
+        }
     }
 
     public function delete(Serie $serie)
     {
         try {
-            $serie = $this->model->findOrFail($serie->id);
+            $serie = $this->model->find($serie->id);
             $serie->delete();
             return response()->json(['success' => 'Série deletada com sucesso'], 200);
         } catch (\Exception $e) {
