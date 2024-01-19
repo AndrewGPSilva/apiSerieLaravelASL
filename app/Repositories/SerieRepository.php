@@ -15,12 +15,24 @@ class SerieRepository
 
     public function all()
     {
-        return $this->model->all();
+        try {
+            $serie = $this->model->all();
+            if ($serie->isEmpty()) {
+                return response()->json(['error' => 'Nenhuma série encontrada'], 404);
+            }
+            return $serie;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function find($id)
     {
-        return $this->model->find($id);
+        try {
+            return $this->model->findOrFail($id);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Série não encontrada', 'Generic Message' => $e->getMessage()], 404);
+        }
     }
 
     public function create(array $data)

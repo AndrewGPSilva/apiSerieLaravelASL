@@ -22,14 +22,7 @@ class SerieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titulo' => 'required|string|max:255',
-            'capa' => 'nullable|url',
-            'genero' => 'required|string|max:255',
-            'sinopse' => 'required|string',
-            'ano' => 'required|integer|min:1900|max:',
-            'temporadas' => 'required|integer|min:1',
-            'episodios' => 'required|integer|min:1',
-            'classificacao' => 'required|string|max:255',
+
         ];
     }
 }
