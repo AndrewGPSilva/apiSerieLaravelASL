@@ -37,7 +37,12 @@ class SerieRepository
 
     public function create(array $data)
     {
-        return $this->model->create($data);
+        try {
+            $serie = $this->model->create($data);
+            return response()->json($serie, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao criar série', 'Generic Message' => $e->getMessage()], 400);
+        }
     }
 
     public function update(Serie $serie, array $data)
@@ -47,6 +52,12 @@ class SerieRepository
 
     public function delete(Serie $serie)
     {
-        return $serie->delete();
+        try {
+            $serie = $this->model->findOrFail($serie->id);
+            $serie->delete();
+            return response()->json(['success' => 'Série deletada com sucesso'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erro ao deletar série', 'Generic Message' => $e->getMessage()], 400);
+        }
     }
 }

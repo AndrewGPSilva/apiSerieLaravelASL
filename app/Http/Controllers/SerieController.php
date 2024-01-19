@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SerieRequest;
 use App\Services\SerieService;
+use Illuminate\Http\Request;
 
 class SerieController extends Controller
 {
@@ -24,12 +24,12 @@ class SerieController extends Controller
         return $this->service->find($id);
     }
 
-    public function store(SerieRequest $request)
+    public function store(Request $request)
     {
         return $this->service->create($request->all());
     }
 
-    public function update(SerieRequest $request, $id)
+    public function update(Request $request, $id)
     {
         return $this->service->update($id, $request->all());
     }
