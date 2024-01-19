@@ -2,40 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Serie;
-use Illuminate\Http\Request;
+use App\Http\Requests\SerieRequest;
+use App\Services\SerieService;
 
 class SerieController extends Controller
 {
-    public function index()
+    protected $service;
+
+    public function __construct(SerieService $service)
     {
-        $aulas = Serie::all();
-        return response()->json($aulas, 200);
+        $this->service = $service;
     }
 
-    public function store(Request $request)
+    public function index()
     {
-        $aula = Serie::create($request->all());
-        return response()->json($aula);
+        return $this->service->all();
     }
 
     public function show($id)
     {
-        $aula = Serie::find($id);
-        return response()->json($aula);
+        return $this->service->find($id);
     }
 
-    public function update(Request $request, $id)
+    public function store(SerieRequest $request)
     {
-        $aula = Serie::find($id);
-        $aula->update($request->all());
-        return response()->json($aula);
+        return $this->service->create($request->all());
+    }
+
+    public function update(SerieRequest $request, $id)
+    {
+        return $this->service->update($id, $request->all());
     }
 
     public function destroy($id)
     {
-        $aula = Serie::find($id);
-        $aula->delete();
-        return response()->json(['message' => 'Serie deletada com sucesso!']);
+        return $this->service->delete($id);
     }
 }
