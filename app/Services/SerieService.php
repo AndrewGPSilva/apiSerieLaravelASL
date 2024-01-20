@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Repositories\SerieRepository;
 
-class SerieService {
-
+class SerieService
+{
     protected $repository;
 
     public function __construct(SerieRepository $repository)
@@ -30,13 +30,11 @@ class SerieService {
 
     public function update($id, array $data)
     {
-        $serie = $this->repository->find($id);
-        return $this->repository->update($serie, $data);
+        return $this->repository->update($id, $data);
     }
 
     public function delete($id)
     {
-        $serie = $this->repository->find($id);
-        return $this->repository->delete($serie);
+        return $this->repository->delete($id);
     }
 }

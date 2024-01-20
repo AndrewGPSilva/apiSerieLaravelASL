@@ -49,9 +49,27 @@ class SerieController extends Controller
         }
     }
 
-    public function update(SerieRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        return $this->service->update($id, $request->all());
+        $validator = Validator::make($request->all(),[
+            'titulo' => 'required|max:30|min:3|unique:series,titulo',
+            'capa' => 'required|url|unique:series,titulo',
+            'genero' => 'required|min:3|max:20',
+            'sinopse' => 'required|min:3|max:1000|unique:series,titulo',
+            'ano' => 'required|integer|min:1900|max:2024',
+            'temporadas' => 'required|integer|min:1|max:100',
+            'episodios' => 'required|integer|min:1|max:1000',
+            'classificacao' => 'required|integer|min:1|max:18',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                "error" => 'Erro de validação',
+                "message" => $validator->errors(),
+            ], 422);
+        } else {
+            return $this->service->update($id, $request->all());
+        }
     }
 
     public function destroy($id)

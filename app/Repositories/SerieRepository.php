@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Interfaces\SerieInterface;
 use App\Models\Serie;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 
 class SerieRepository implements SerieInterface
 {
@@ -46,23 +48,23 @@ class SerieRepository implements SerieInterface
         }
     }
 
-    public function update(Serie $serie, array $data)
+    public function update(int $id, array $data)
     {
         try {
-            $serie->update($data);
+            $existingSerie = $this->model->findOrFail($id);
+            $existingSerie->update($data);
             return response()->json(['message' => 'Série atualizada com sucesso!'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Série não encontrada'], 404);
         } catch (\Exception $e) {
-            if ($serie->isEmpty()) {
-                return response()->json(['error' => 'Série não encontrada', 'details' => $e->getMessage()], 404);
-            }
-            return response()->json(['error' => 'Erro ao atualizar série', 'details' => $e->getMessage()], 400);
+            return response()->json(['error' => 'Erro ao atualizar série'], 400);
         }
     }
 
-    public function delete(Serie $serie)
+    public function delete($id)
     {
         try {
-            $serie = $this->model->find($serie->id);
+            $serie = $this->model->findOrFail($id);
             $serie->delete();
             return response()->json(['success' => 'Série deletada com sucesso'], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
