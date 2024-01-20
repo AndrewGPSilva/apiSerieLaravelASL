@@ -2,9 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\SerieInterface;
 use App\Models\Serie;
 
-class SerieRepository
+class SerieRepository implements SerieInterface
 {
     protected $model;
 
@@ -31,7 +32,7 @@ class SerieRepository
         try {
             return $this->model->findOrFail($id);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Série não encontrada', 'Generic Message' => $e->getMessage()], 404);
+            return response()->json(['error' => 'Série não encontrada'], 404);
         }
     }
 
@@ -41,7 +42,7 @@ class SerieRepository
             $serie = $this->model->create($data);
             return response()->json($serie, 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao criar série', 'Generic Message' => $e->getMessage()], 400);
+            return response()->json(['error' => 'Erro ao criar série'], 400);
         }
     }
 
@@ -58,14 +59,14 @@ class SerieRepository
         }
     }
 
-    public function delete($id)
+    public function delete(Serie $serie)
     {
         try {
-            $serie = $this->model->find($id);
+            $serie = $this->model->find($serie->id);
             $serie->delete();
             return response()->json(['success' => 'Série deletada com sucesso'], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Erro ao deletar série', 'Generic Message' => $e->getMessage()], 404);
+            return response()->json(['error' => 'Erro ao deletar série'], 404);
         }
     }
 }
