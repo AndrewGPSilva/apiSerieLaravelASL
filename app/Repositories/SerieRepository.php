@@ -58,14 +58,14 @@ class SerieRepository
         }
     }
 
-    public function delete(Serie $serie)
+    public function delete($id)
     {
         try {
-            $serie = $this->model->find($serie->id);
+            $serie = $this->model->find($id);
             $serie->delete();
             return response()->json(['success' => 'Série deletada com sucesso'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao deletar série', 'Generic Message' => $e->getMessage()], 400);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Erro ao deletar série', 'Generic Message' => $e->getMessage()], 404);
         }
     }
 }
